@@ -1,0 +1,24 @@
+version: "2"
+
+issues:
+  max-same-issues: 0
+
+linters:
+  default: standard
+  enable:
+    - copyloopvar
+    - durationcheck
+    - forcetypeassert
+    - godot
+    - makezero
+    - misspell
+    - nilerr
+    - predeclared
+    - unconvert
+    - unparam
+
+  settings:
+    misspell:
+      locale: US
+      ignore-rules:
+        - copywrite
