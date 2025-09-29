@@ -46,7 +46,7 @@ func (d *FileResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 		MarkdownDescription: "The file resource downloads a file once.",
 		Attributes: map[string]schema.Attribute{
 			"url": schema.StringAttribute{
-				MarkdownDescription: fmt.Sprintf("The URL of the file to download."),
+				MarkdownDescription: "The URL of the file to download.",
 				Optional:            false,
 				Required:            true,
 				Computed:            false,
@@ -116,7 +116,12 @@ func (r *FileResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddError("Failed to fetch URL", err.Error())
 		return
 	}
-	defer httpResp.Body.Close()
+	defer func() {
+		if err := httpResp.Body.Close(); err != nil {
+			resp.Diagnostics.AddError("Failed to close response body", err.Error())
+		}
+	}()
+
 	body, err := io.ReadAll(httpResp.Body)
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to read response body", err.Error())
@@ -161,5 +166,4 @@ func (r *FileResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 func (r *FileResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.AddError("Not Implemented.", "Not implemented.")
-	return
 }
