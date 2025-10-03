@@ -5,6 +5,7 @@ package provider
 
 import (
 	"context"
+	"terraform-provider-utilities/internal/provider/http"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/function"
@@ -55,13 +56,15 @@ func (p *UtilitiesProvider) Configure(ctx context.Context, req provider.Configur
 
 func (p *UtilitiesProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewFileResource,
+		http.NewHttpResource,
 		NewNanoIdResource,
 	}
 }
 
 func (p *UtilitiesProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		http.NewHttpDataSource,
+	}
 }
 
 func (p *UtilitiesProvider) Functions(ctx context.Context) []func() function.Function {
